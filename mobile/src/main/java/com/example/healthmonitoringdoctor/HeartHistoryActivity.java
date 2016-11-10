@@ -1,4 +1,4 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

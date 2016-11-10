@@ -1,4 +1,4 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Heart Health Monitoring</string>
+    <string name="app_name">Heart Health Monitoring Doctor</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -32,4 +32,6 @@
     <string name="title_activity_heartHistory">Heart History</string>
     <string name="title_activity_profile">My Profile</string>
     <string name="title_activity_contactDoctor">Contact Doctor</string>
+    <string name="my_patients">My Patients</string>
+    <string name="view_alerts">View Alerts</string>
 </resources>

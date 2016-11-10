@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.healthmonitoring">
+    package="com.example.healthmonitoringdoctor">
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
@@ -16,7 +16,7 @@
         <uses-library android:name="com.google.android.wearable" android:required="false" />
         
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.healthmonitoringdoctor.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
         </activity>
 
         <service
-            android:name=".WearService" >
+            android:name="com.example.healthmonitoringdoctor.WearService" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
 

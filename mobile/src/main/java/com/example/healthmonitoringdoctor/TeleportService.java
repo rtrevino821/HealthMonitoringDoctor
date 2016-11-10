@@ -1,4 +1,4 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

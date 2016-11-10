@@ -1,4 +1,4 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity
     private ImageView btnHRHistory;
     private ImageView btnViewProfile;
     private ImageView btnCheckMyPulse;
-    private ImageView btnContactDoctor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity
         btnHRHistory = (ImageView) findViewById(R.id.btn_hr_history);
         btnViewProfile = (ImageView) findViewById(R.id.btn_view_profile);
         btnCheckMyPulse = (ImageView) findViewById(R.id.btn_check_my_pulse);
-        btnContactDoctor = (ImageView) findViewById(R.id.btn_contact_doctor);
 
         btnHRHistory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,14 +55,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent checkPulseIntent = new Intent(MainActivity.this, CheckPulseActivity.class);
                 startActivity(checkPulseIntent);
-            }
-        });
-
-        btnContactDoctor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
-                startActivity(contactIntent);
             }
         });
 

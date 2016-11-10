@@ -1,4 +1,4 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -321,13 +321,13 @@ public class TeleportClient implements DataApi.DataListener,
 
         boolean flagHandled = false;
 
-        if (onGetMessageTaskBuilder != null) {
+        if(onGetMessageTaskBuilder != null) {
             String path = messageEvent.getPath();
             onGetMessageTaskBuilder.build().execute(path);
             flagHandled = true;
         }
 
-        if (!flagHandled && onGetMessageCallback != null) {
+        if(!flagHandled && onGetMessageCallback != null) {
             String messagePath = messageEvent.getPath();
             onGetMessageCallback.onCallback(messagePath);
             flagHandled = true;
@@ -435,9 +435,8 @@ public class TeleportClient implements DataApi.DataListener,
         protected abstract void onPostExecute(Bitmap bitmap);
 
     }
-}
 
-
+    ;
 
 
 //    /**
@@ -462,3 +461,6 @@ public class TeleportClient implements DataApi.DataListener,
 //        // decode the stream into a bitmap
 //        return BitmapFactory.decodeStream(assetInputStream);
 //    }
+
+
+}

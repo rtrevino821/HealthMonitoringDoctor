@@ -1,14 +1,10 @@
-package com.example.healthmonitoring;
+package com.example.healthmonitoringdoctor;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.data.FreezableUtils;
@@ -25,6 +21,7 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -32,16 +29,13 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Created by Mario Viviani on 09/07/2014.
+ * Created by Mario Viviani on 10/07/2014.
  */
-public class TeleportClient implements DataApi.DataListener,
-        MessageApi.MessageListener, NodeApi.NodeListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
-
-
-    private static final String TAG = "TeleportClient";
+public abstract class TeleportService extends WearableListenerService {
 
     private GoogleApiClient mGoogleApiClient;
+    private static final String TAG = "TeleportService";
+
 
     //    private AsyncTask<?,?,?> asyncTask;
     private OnSyncDataItemTask onSyncDataItemTask;
@@ -51,43 +45,18 @@ public class TeleportClient implements DataApi.DataListener,
     private OnGetMessageTask.Builder onGetMessageTaskBuilder;
     private OnGetMessageCallback onGetMessageCallback;
 
-    private Handler mHandler;
+    @Override
+    public void onCreate() {
+        super.onCreate();
 
-    public TeleportClient(Context context) {
-
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
                 .build();
-
-
-    }
-
-    public void connect() {
         mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected");
-        Wearable.DataApi.addListener(mGoogleApiClient, this);
-        Wearable.MessageApi.addListener(mGoogleApiClient, this);
-        Wearable.NodeApi.addListener(mGoogleApiClient, this);
-    }
-
-    public void disconnect() {
-        Log.d(TAG, "disconnect");
-        Wearable.DataApi.removeListener(mGoogleApiClient, this);
-        Wearable.MessageApi.removeListener(mGoogleApiClient, this);
-        Wearable.NodeApi.removeListener(mGoogleApiClient, this);
-        mGoogleApiClient.disconnect();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
 
     }
+
+
 
     //--------------SYNC DATAITEM ------------------//
 
@@ -98,6 +67,8 @@ public class TeleportClient implements DataApi.DataListener,
 
         for (DataEvent event : events) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
+
+
 
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                 DataMap dataMap = dataMapItem.getDataMap();
@@ -172,7 +143,6 @@ public class TeleportClient implements DataApi.DataListener,
         syncDataItem(putDataMapRequest);
     }
 
-
     //General method to sync data in the Data Layer
     public void syncDataItem(PutDataMapRequest putDataMapRequest) {
 
@@ -199,6 +169,7 @@ public class TeleportClient implements DataApi.DataListener,
 
     /**
      * Get the TeleportTask that will be executed when a DataItem is synced
+     *
      */
     public OnSyncDataItemTask getOnSyncDataItemTask() {
         return onSyncDataItemTask;
@@ -208,35 +179,15 @@ public class TeleportClient implements DataApi.DataListener,
     /**
      * Set the TeleportTask to be executed when a DataItem is synced
      *
-     * @param onSyncDataItemTask A Task that extends TeleportTask that should be executed when a DataItem is Synced. Keep in mind it will be executed only once, so you might need to reset it.
+     * @param onSyncDataItemTask task to be executed. Keep in mind it will be executed only once, so you might need to reset it.
      */
     public void setOnSyncDataItemTask(OnSyncDataItemTask onSyncDataItemTask) {
         this.onSyncDataItemTask = onSyncDataItemTask;
     }
 
-    /**
-     * Set a Builder to be called in order to have an AsyncTask Handling the DataItem syncing
-     * Keep in mind that you shall not use this unless you have multiple Syncing event coming in a short timelapse, thus requiring multiple AsyncTask to handle them.
-     *
-     * @param onSyncDataItemTaskBuilder A Builder for a task that extends TeleportTask that should be executed when a DataItem is Synced. Keep in mind it will be executed only once, so you might need to reset it.
-     */
-    public void setOnSyncDataItemTaskBuilder(OnSyncDataItemTask.Builder onSyncDataItemTaskBuilder) {
-        this.onSyncDataItemTaskBuilder = onSyncDataItemTaskBuilder;
-    }
-
-    /**
-     * Set the Callback to be executed when a DataItem is synced
-     *
-     * @param onSyncDataItemCallback A Task that extends TeleportTask that should be executed when a DataItem is Synced. Keep in mind it will be executed only once, so you might need to reset it.
-     */
-    public void setOnSyncDataItemCallback(OnSyncDataItemCallback onSyncDataItemCallback) {
-        this.onSyncDataItemCallback = onSyncDataItemCallback;
-    }
 
 
-    /**
-     * AsyncTask that will be executed when a DataItem is synced. You should extend this task and implement the onPostExecute() method when implementing your Activity.
-     */
+
     public abstract static class OnSyncDataItemTask extends AsyncTask<DataMap, Void, DataMap> {
 
         public abstract static class Builder {
@@ -261,6 +212,26 @@ public class TeleportClient implements DataApi.DataListener,
 
         abstract public void onDataSync(DataMap dataMap);
     }
+
+    /**
+     * Set a Builder to be called in order to have an AsyncTask Handling the DataItem syncing
+     * Keep in mind that you shall not use this unless you have multiple Syncing event coming in a short timelapse, thus requiring multiple AsyncTask to handle them.
+     *
+     * @param onSyncDataItemTaskBuilder A Builder for a task that extends TeleportTask that should be executed when a DataItem is Synced. Keep in mind it will be executed only once, so you might need to reset it.
+     */
+    public void setOnSyncDataItemTaskBuilder(OnSyncDataItemTask.Builder onSyncDataItemTaskBuilder) {
+        this.onSyncDataItemTaskBuilder = onSyncDataItemTaskBuilder;
+    }
+
+    /**
+     * Set the Callback to be executed when a DataItem is synced
+     *
+     * @param onSyncDataItemCallback A Task that extends TeleportTask that should be executed when a DataItem is Synced. Keep in mind it will be executed only once, so you might need to reset it.
+     */
+    public void setOnSyncDataItemCallback(OnSyncDataItemCallback onSyncDataItemCallback) {
+        this.onSyncDataItemCallback = onSyncDataItemCallback;
+    }
+
 
     //-----------------MESSAGING------------------//
 
@@ -342,8 +313,9 @@ public class TeleportClient implements DataApi.DataListener,
     }
 
     /**
-     * AsyncTask that will be executed when a Message is received You should extend this task and implement the onPostExecute() method when implementing your Activity.
-     */
+     * AsyncTask that will be executed when a Message is received You should extend this task and implement the onPostExecute() method when implementing your Service.
+     *
+     * */
     public abstract static class OnGetMessageTask extends AsyncTask<String, Void, String> {
 
         public abstract static class Builder {
@@ -362,11 +334,11 @@ public class TeleportClient implements DataApi.DataListener,
         protected abstract void onPostExecute(String path);
     }
 
-
     public abstract static class OnGetMessageCallback {
 
         abstract public void onCallback(String dataMap);
     }
+
 
     public OnGetMessageTask getOnGetMessageTask() {
         return onGetMessageTask;
@@ -375,7 +347,6 @@ public class TeleportClient implements DataApi.DataListener,
     public void setOnGetMessageTask(OnGetMessageTask onGetMessageTask) {
         this.onGetMessageTask = onGetMessageTask;
     }
-
 
     /**
      * Set a Builder to be called in order to have an AsyncTask Handling Message
@@ -390,43 +361,17 @@ public class TeleportClient implements DataApi.DataListener,
     public void setOnGetMessageCallback(OnGetMessageCallback onGetMessageCallback) {
         this.onGetMessageCallback = onGetMessageCallback;
     }
-    //---END MESSAGING ------
 
-    @Override
-    public void onPeerConnected(Node node) {
-
-    }
-
-    @Override
-    public void onPeerDisconnected(Node node) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
-
-
-    public GoogleApiClient getGoogleApiClient() {
-        return mGoogleApiClient;
-    }
-
-    public void setGoogleApiClient(GoogleApiClient mGoogleApiClient) {
-        this.mGoogleApiClient = mGoogleApiClient;
-    }
-
-
-    /**
-     * Task to elaborate image from an Asset. You must pass the Asset and the mTeleportClient.getGoogleApiClient
+    /***
+     * Task to elaborate image from an Asset. You must pass the Asset and the getGoogleApiClient()
      */
-    public abstract static class ImageFromAssetTask extends AsyncTask<Object, Void, Bitmap> {
+    public abstract static class ImageFromAssetTask extends AsyncTask<Object, Void,Bitmap>{
 
         @Override
         protected Bitmap doInBackground(Object... params) {
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
-                    (GoogleApiClient) params[1], (Asset) params[0]).await().getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(assetInputStream);
+                    (GoogleApiClient)params[1], (Asset)params[0]).await().getInputStream();
+            Bitmap bitmap=  BitmapFactory.decodeStream(assetInputStream);
             return bitmap;
 
         }
@@ -434,10 +379,7 @@ public class TeleportClient implements DataApi.DataListener,
         @Override
         protected abstract void onPostExecute(Bitmap bitmap);
 
-    }
-
-    ;
-
+    };
 
 //    /**
 //     * Loads Bitmap from Asset
@@ -461,6 +403,15 @@ public class TeleportClient implements DataApi.DataListener,
 //        // decode the stream into a bitmap
 //        return BitmapFactory.decodeStream(assetInputStream);
 //    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+    public void setGoogleApiClient(GoogleApiClient mGoogleApiClient) {
+        this.mGoogleApiClient = mGoogleApiClient;
+    }
+
 
 
 }
