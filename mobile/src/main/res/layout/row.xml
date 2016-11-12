@@ -23,21 +23,21 @@
             android:gravity="center_vertical|center_horizontal">
 
             <TextView
-                android:text="Mon, Nov. 18"
+                android:text="Patient Name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_History_Date"
+                android:id="@+id/tv_Patient_Name"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20dp"
+                android:textSize="35dp"
                 android:textAlignment="center" />
 
             <TextView
-                android:text="12:30 PM"
+                android:text="Last Visit: 8/29/2016"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tv_History_Time"
+                android:id="@+id/tv_Last_Visit"
                 android:textColor="@color/colorAccent"
-                android:textSize="15dp"
+                android:textSize="23dp"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -48,24 +48,28 @@
             android:layout_weight="1">
 
             <TextView
+                android:text="Current BPM Threshold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_Current_Threshold_Label"
+                android:layout_weight="1"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:minHeight="58dp"
+                android:textAlignment="center"
+                android:gravity="bottom|center_horizontal" />
+
+            <TextView
                 android:text="120"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/tv_History_Pulse"
+                android:id="@+id/tv_Current_Threshold"
                 android:layout_weight="1"
                 android:textColor="@color/colorPrimary"
                 android:textSize="60dp"
                 android:textAlignment="center" />
 
-            <TextView
-                android:text="BPM"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_History_BPM"
-                android:layout_weight="1"
-                android:textColor="@color/colorAccent"
-                android:minHeight="58dp"
-                android:textAlignment="center" />
+
         </LinearLayout>
 
     </LinearLayout>

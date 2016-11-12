@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by rtrev on 10/23/2016.
  */
@@ -14,29 +16,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     Context context;
 
-    private String[] reading = {"120", "80", "69", "78", "95"};
-    private String[] dates = {"Monday, Nov. 20", "Tuesday, Nov.21", "Wednesday, Nov. 22", "Thursday, Nov. 23", "Friday, Nov. 24"};
-    private String[] times = {"12:00 pm", "8:00 pm", "4:30 pm", "2:39 pm", "9:30 am"};
-
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public int currentItem;
-        public TextView itemReading;
-        public TextView itemDate;
-        public TextView itemTime;
+        public TextView itemPatientName;
+        public TextView itemLastVisit;
+        public TextView itemThreshold;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemReading = (TextView) itemView.findViewById(R.id.tv_History_Pulse);
-            itemDate = (TextView) itemView.findViewById(R.id.tv_History_Date);
-            itemTime = (TextView) itemView.findViewById(R.id.tv_History_Time);
+            itemPatientName = (TextView) itemView.findViewById(R.id.tv_Patient_Name);
+            itemLastVisit = (TextView) itemView.findViewById(R.id.tv_Last_Visit);
+            itemThreshold = (TextView) itemView.findViewById(R.id.tv_Current_Threshold);
 
         }
+    }
+
+    List<Patient> patients;
+
+    RecyclerAdapter(List<Patient> patients){
+        this.patients = patients;
     }
 
 
     public RecyclerAdapter(Context context) {
     }
+
+
 
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -47,15 +52,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder viewHolder, int position) {
-        viewHolder.itemTime.setText(times[position]);
-        viewHolder.itemReading.setText(reading[position]);
-        viewHolder.itemDate.setText(dates[position]);
-
+        viewHolder.itemPatientName.setText(patients.get(position).name);
+        viewHolder.itemLastVisit.setText("Last Visit: " + patients.get(position).lastVisit);
+        viewHolder.itemThreshold.setText(patients.get(position).threshold);
     }
 
     @Override
     public int getItemCount() {
-        return reading.length;
+        return patients.size();
     }
 
 
